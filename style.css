@@ -1,0 +1,408 @@
+body {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin: 0;
+    background: #181c24;
+    color: #f6f7fa;
+    font-family: 'Segoe UI', 'Arial', sans-serif;
+    /* 增加整体内边距，防止内容贴边 */
+    padding: 24px 8px 24px 8px;
+    box-sizing: border-box;
+}
+
+/* 扁平化容器边框，更清晰的分隔感 */
+.main-container {
+    background: #232a34;
+    border-radius: 16px;
+    /* 移除阴影，扁平化 */
+    box-shadow: none;
+    padding: 32px 28px 24px 28px;
+    margin: 0 auto;
+    max-width: 900px;
+    width: 100%;
+    box-sizing: border-box;
+    border: 1.5px solid #2d3640;
+    /* 从与背景相近调整为更清晰但不突兀的边框 */
+    /* 防止内容溢出 */
+    overflow: hidden;
+    position: relative;
+    /* 让绝对定位的字符数提示相对容器定位 */
+}
+
+textarea#content {
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+    height: 340px;
+    font-size: 17px;
+    resize: vertical;
+    margin-bottom: 22px;
+    background: #1a2029;
+    color: #f6f7fa;
+    border: 1.5px solid #2d3640;
+    border-radius: 9px;
+    padding: 14px;
+    box-sizing: border-box;
+    outline: none;
+    /* iOS Safari 优化 */
+    -webkit-appearance: none;
+    transition: border 0.18s, background 0.18s;
+}
+
+textarea#content:focus {
+    border: 1.5px solid #6ea8fe;
+    background: #202736;
+}
+
+div {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+
+/* 扁平化按钮：去掉渐变和阴影，统一深色块背景 */
+button {
+    background: #232a34;
+    /* 纯色背景 */
+    color: #f6f7fa;
+    border: 1.5px solid #2d3640;
+    /* 细边框 */
+    border-radius: 8px;
+    /* 稍小圆角 */
+    padding: 10px 22px;
+    /* 紧凑内边距 */
+    font-size: 16px;
+    cursor: pointer;
+    transition: background 0.15s, color 0.15s, border 0.15s;
+    outline: none;
+    box-shadow: none;
+    /* 去阴影 */
+    font-weight: 500;
+    letter-spacing: 0.3px;
+}
+
+button:hover,
+button:focus {
+    background: #2a3443;
+    /* 轻微变亮 */
+    color: #a7d0ff;
+    border-color: #42506b;
+}
+
+button:active {
+    background: #1c2430;
+    color: #cfd6df;
+    border-color: #2d3640;
+}
+
+/* Key 提示文本保持简洁 */
+#key-tip {
+    margin-top: 16px;
+    color: #a2adc5;
+    font-size: 15px;
+    word-break: break-word;
+    text-align: center;
+    max-width: 100%;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* 字符统计提示保持小卡片样式 */
+.char-count-tip {
+    font-size: 14px;
+    color: #d1d5db;
+    letter-spacing: 0.5px;
+    user-select: none;
+    background: #2d3640;
+    padding: 6px 12px;
+    border-radius: 4px;
+    /* 减小圆角 */
+    box-shadow: none;
+    /* 移除阴影 */
+    position: absolute;
+    bottom: 16px;
+    right: 16px;
+    pointer-events: none;
+    /* 避免遮挡文本框的触摸/点击操作 */
+}
+
+.qr-modal {
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.3);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;
+    backdrop-filter: blur(4px);
+}
+
+/* 扁平化弹窗：去掉阴影、深色背景，与整体一致 */
+.qr-dialog {
+    background: #232a34;
+    /* 与主容器统一 */
+    color: #f6f7fa;
+    padding: 18px 18px 12px 18px;
+    /* 更紧凑 */
+    border-radius: 8px;
+    box-shadow: none;
+    /* 去阴影 */
+    border: 1px solid #2d3640;
+    /* 细边框 */
+    text-align: center;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    max-width: 95vw;
+    max-height: 95vh;
+    overflow: auto;
+}
+
+.qr-tip-input-div {
+    transition: opacity 0.3s;
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #1a2029;
+    /* 深色卡片 */
+    border-radius: 8px;
+    padding: 12px 14px;
+    box-shadow: none;
+    /* 去阴影 */
+    border: 1px solid #2d3640;
+    opacity: 0;
+    flex-wrap: wrap;
+    max-width: 90vw;
+}
+
+/* 标签与输入的扁平化配色 */
+.qr-tip-label {
+    margin-right: 8px;
+    font-size: 15px;
+    color: #cbd5e1;
+    /* 更浅文字 */
+    white-space: nowrap;
+}
+
+.qr-tip-input {
+    padding: 8px 10px;
+    font-size: 15px;
+    width: 240px;
+    max-width: 60vw;
+    border: 1.5px solid #2d3640;
+    border-radius: 8px;
+    outline: none;
+    background: #1a2029;
+    color: #f6f7fa;
+    transition: border-color 0.18s, background 0.18s;
+    box-sizing: border-box;
+}
+
+.qr-tip-input:focus {
+    border-color: #6ea8fe;
+    background: #202736;
+}
+
+/* 弹窗内按钮沿用全局按钮风格，仅微调间距 */
+.qr-tip-btn {
+    margin-left: 10px;
+    margin-top: 8px;
+}
+
+/* 错误提示（若有） */
+.qr-tip-error {
+    color: #e57373;
+    font-size: 13px;
+    margin-left: 10px;
+    display: none;
+    margin-top: 8px;
+}
+
+/* 居中 key 输入行（替代内联样式） */
+.key-input-row {
+    justify-content: center;
+    margin-bottom: 12px;
+}
+
+/* 顶部 KEY 提示与修改区域 */
+.key-bar {
+    text-align: center;
+    margin-bottom: 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    align-items: center;
+}
+
+.key-tip {
+    color: #aaa;
+    font-size: 15px;
+}
+
+.key-actions {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    justify-content: center;
+}
+
+.key-actions #key-input {
+    padding: 6px 12px;
+    font-size: 15px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    width: 220px;
+}
+
+.key-actions #key-apply {
+    padding: 6px 12px;
+    font-size: 14px;
+    border: 1px solid #1976d2;
+    background: #1976d2;
+    color: #fff;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.key-actions #key-apply:hover {
+    background: #145ea8;
+    border-color: #145ea8;
+}
+
+/* 页面主体容器 */
+.main-container {
+    position: relative;
+}
+
+/* 隐藏文件输入 */
+#file-input {
+    display: none;
+}
+
+/* 移动端优化保持不变或更紧凑 */
+@media (max-width: 600px) {
+    .main-container {
+        padding: 14px 2vw 10px 2vw;
+        width: 100vw;
+        max-width: 100vw;
+        min-width: 0;
+        border-radius: 12px;
+    }
+
+    textarea#content {
+        font-size: 15px;
+        height: 180px;
+    }
+
+    button {
+        width: 100%;
+        min-width: 120px;
+        font-size: 15px;
+        padding: 10px 0;
+    }
+
+    /* 优化字符数提示在移动端的位置，放到内容区下方居中 */
+    .char-count-tip {
+        position: static;
+        display: block;
+        margin: 0px auto 0 auto;
+        right: auto;
+        bottom: auto;
+        text-align: center;
+        width: fit-content;
+        pointer-events: none;
+    }
+
+    .qr-dialog {
+        padding: 8px 1vw 8px 1vw;
+        border-radius: 10px;
+        max-width: 98vw;
+        width: 98vw;
+        min-width: 0;
+        box-sizing: border-box;
+        align-items: stretch;
+    }
+
+    .qr-canvas-wrap {
+        width: 94vw;
+        max-width: 94vw;
+        min-width: 0;
+        padding: 8px;
+        border-radius: 10px;
+    }
+
+    .qr-canvas-wrap canvas {
+        max-width: 100% !important;
+        height: auto !important;
+    }
+
+    .qr-tip-input-div {
+        flex-direction: column;
+        align-items: stretch;
+        padding: 8px 2vw;
+        margin-bottom: 10px;
+    }
+
+    .qr-tip-label {
+        margin-bottom: 6px;
+        margin-right: 0;
+    }
+
+    .qr-tip-input {
+        width: 100%;
+        max-width: 100%;
+        margin-bottom: 8px;
+    }
+
+    .qr-tip-btn {
+        width: 100%;
+        margin-left: 0;
+        margin-top: 8px;
+    }
+
+    .qr-dialog button {
+        width: 100%;
+        min-width: 0;
+        margin-bottom: 6px;
+        font-size: 15px;
+        padding: 10px 0;
+    }
+
+    .qr-dialog div[style*="display: flex"] {
+        flex-direction: column !important;
+        gap: 8px !important;
+        align-items: stretch !important;
+    }
+}
+
+/* 优化二维码弹窗显示，缩略图最大宽度 */
+.qr-canvas-wrap {
+    display: grid;
+    place-items: center;
+    width: min(86vw, 360px);
+    max-width: 360px;
+    aspect-ratio: 1 / 1;
+    background: #ffffff;
+    border-radius: 12px;
+    border: 1px solid #e5e7eb;
+    padding: 16px;
+    box-sizing: border-box;
+    overflow: hidden;
+}
+
+.qr-canvas-wrap canvas {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+    border-radius: 4px;
+    background: #fff;
+}

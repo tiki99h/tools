@@ -1,0 +1,1 @@
+window.KEY = '7BB4CF1B-DDF6-47F9-A832-0C9C9A82697B'; // 默认密钥

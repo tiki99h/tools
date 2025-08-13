@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+        content="width=device-width, initial-scale=1.0, user-scalable=no, maximum-scale=1.0, minimum-scale=1.0">
+    <title>Security tools</title>
+    <script src="qrcode.min.js"></script>
+    <script src="key.js"></script>
+    <script src="aes.js"></script>
+    <script src="main.js"></script>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <div class="key-bar">
+        <div class="key-actions">
+            <input id="key-input" type="text" placeholder="输入新密钥">
+            <button id="key-apply" type="button">应用</button>
+        </div>
+    </div>
+
+    <div class="main-container">
+        <textarea name="" id="content" cols="60" rows="5"></textarea>
+        <div>
+            <button id="btn-encrypt">加密</button>
+            <button id="btn-decrypt">解密</button>
+            <button id="btn-upload">上传</button>
+            <button id="btn-download">下载</button>
+            <button id="btn-copy">复制</button>
+            <button id="btn-qr">二维码</button>
+            <input type="file" id="file-input" accept=".txt">
+        </div>
+        <div id="qrcode"></div>
+    </div>
+
+    <!-- Move key-tip to the bottom -->
+    <div id="key-tip" class="key-tip"></div>
+</body>
+
+</html>
