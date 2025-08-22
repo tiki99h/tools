@@ -32,7 +32,7 @@ window.onload = () => {
 
     document.getElementById('btn-encrypt').onclick = () => {
         if (!KEY) {
-            alert('加密密钥未加载，请稍后再试。');
+            alert('请先输入密钥。');
             return;
         }
         let result = encryptData(content.value, KEY);
