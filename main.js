@@ -1,3 +1,5 @@
+window.KEY = ''; // 全局KEY变量
+
 window.onload = () => {
     // KEY提示
     const keyTip = document.getElementById('key-tip');
@@ -42,7 +44,7 @@ window.onload = () => {
 
     document.getElementById('btn-decrypt').addEventListener('click', () => {
         if (!KEY) {
-            alert('加密密钥未加载，请稍后再试。');
+            alert('请先输入密钥。');
             return;
         }
         let decrypted = decryptData(content.value, KEY);
@@ -146,72 +148,17 @@ window.onload = () => {
             alert('内容为空，请先输入内容再生成二维码。');
             return;
         }
-
-        // 创建弹窗遮罩
-        let modal = document.createElement('div');
-        modal.className = 'qr-modal';
-
-        // 弹窗内容
-        let dialog = document.createElement('div');
-        dialog.className = 'qr-dialog';
-
-        // ===== 优化：提示信息输入框和密钥选项 =====
-        let tipInputDiv = document.createElement('div');
-        tipInputDiv.className = 'qr-tip-input-div';
-
-        let tipLabel = document.createElement('label');
-        tipLabel.textContent = '请输入提示信息：';
-        tipLabel.className = 'qr-tip-label';
-
-        let tipInput = document.createElement('input');
-        tipInput.type = 'text';
-        tipInput.className = 'qr-tip-input';
-
-        // 新增：密钥提示选项
-        let keyCheckboxLabel = document.createElement('label');
-        keyCheckboxLabel.style.marginLeft = '16px';
-        keyCheckboxLabel.style.fontSize = '14px';
-        keyCheckboxLabel.style.color = '#555';
-        let keyCheckbox = document.createElement('input');
-        keyCheckbox.type = 'checkbox';
-        keyCheckbox.style.marginRight = '4px';
-        keyCheckboxLabel.appendChild(keyCheckbox);
-        keyCheckboxLabel.appendChild(document.createTextNode('二维码下方提示密钥'));
-
-        let tipBtn = document.createElement('button');
-        tipBtn.textContent = '确定';
-        tipBtn.className = 'qr-tip-btn';
-
-        tipInputDiv.appendChild(tipLabel);
-        tipInputDiv.appendChild(tipInput);
-        tipInputDiv.appendChild(keyCheckboxLabel);
-        tipInputDiv.appendChild(tipBtn);
-
-        dialog.appendChild(tipInputDiv);
-        modal.appendChild(dialog);
-        document.body.appendChild(modal);
-
-        // 淡入
-        setTimeout(() => { tipInputDiv.style.opacity = '1'; tipInput.focus(); }, 10);
-
-        // 操作逻辑
-        tipBtn.onclick = function () {
-            const tipText = tipInput.value.trim();
-            const showKey = keyCheckbox.checked;
-            tipInputDiv.style.opacity = '0';
-            setTimeout(() => {
-                dialog.removeChild(tipInputDiv);
-                showQRCodeDialog(tipText, showKey);
-            }, 300);
-        };
-
-        // 回车提交
-        tipInput.addEventListener('keydown', function (e) {
-            if (e.key === 'Enter') tipBtn.onclick();
-        });
-
-        // 主体二维码弹窗逻辑
+        // 直接弹出二维码窗口，不再弹出输入框
+        showQRCodeDialog('', false);
         function showQRCodeDialog(tipText, showKey) {
+            // 创建弹窗遮罩
+            let modal = document.createElement('div');
+            modal.className = 'qr-modal';
+            // 弹窗内容
+            let dialog = document.createElement('div');
+            dialog.className = 'qr-dialog';
+            modal.appendChild(dialog);
+            document.body.appendChild(modal);
             // ===== 新增：根据内容长度动态调整二维码尺寸 =====
             function getDynamicQRSize(text) {
                 // 基础尺寸
