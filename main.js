@@ -213,51 +213,28 @@ window.onload = () => {
             }
 
             setTimeout(() => {
-                let qrImg = qrResult.tmpDiv.querySelector('img') || qrResult.tmpDiv.querySelector('canvas');
-                if (qrImg) {
+                // 只查找canvas，避免img兼容性问题
+                let qrCanvas = qrResult.tmpDiv.querySelector('canvas');
+                if (qrCanvas) {
                     // 计算文本起始Y
                     let y = padding + qrSize;
-                    // ===== 优化：canvas绘制二维码时避免缩放失真 =====
-                    if (qrImg.tagName && qrImg.tagName.toLowerCase() === 'img') {
-                        let img = new window.Image();
-                        img.onload = function () {
-                            ctx.drawImage(img, padding, padding, qrSize, qrSize);
-                            // 绘制KEY
-                            if (showKey) {
-                                ctx.font = `${fontSize}px sans-serif`;
-                                ctx.fillStyle = "#666";
-                                ctx.textAlign = "center";
-                                y += keyMargin + fontSize / 2;
-                                ctx.fillText(keyTip, canvasWidth / 2, y);
-                            }
-                            // 绘制提示信息
-                            if (tipText) {
-                                ctx.font = `bold ${tipFontSize}px sans-serif`;
-                                ctx.fillStyle = "#1976d2";
-                                y += (showKey ? tipMargin + tipFontSize / 2 : keyMargin + tipFontSize / 2);
-                                ctx.fillText(tipText, canvasWidth / 2, y);
-                            }
-                            showDialog();
-                        };
-                        img.src = qrImg.src;
-                    } else {
-                        // 如果是canvas，直接绘制
-                        ctx.drawImage(qrImg, padding, padding, qrSize, qrSize);
-                        if (showKey) {
-                            ctx.font = `${fontSize}px sans-serif`;
-                            ctx.fillStyle = "#666";
-                            ctx.textAlign = "center";
-                            y += keyMargin + fontSize / 2;
-                            ctx.fillText(keyTip, canvasWidth / 2, y);
-                        }
-                        if (tipText) {
-                            ctx.font = `bold ${tipFontSize}px sans-serif`;
-                            ctx.fillStyle = "#1976d2";
-                            y += (showKey ? tipMargin + tipFontSize / 2 : keyMargin + tipFontSize / 2);
-                            ctx.fillText(tipText, canvasWidth / 2, y);
-                        }
-                        showDialog();
+                    ctx.drawImage(qrCanvas, padding, padding, qrSize, qrSize);
+                    // 绘制KEY
+                    if (showKey) {
+                        ctx.font = `${fontSize}px sans-serif`;
+                        ctx.fillStyle = "#666";
+                        ctx.textAlign = "center";
+                        y += keyMargin + fontSize / 2;
+                        ctx.fillText(keyTip, canvasWidth / 2, y);
                     }
+                    // 绘制提示信息
+                    if (tipText) {
+                        ctx.font = `bold ${tipFontSize}px sans-serif`;
+                        ctx.fillStyle = "#1976d2";
+                        y += (showKey ? tipMargin + tipFontSize / 2 : keyMargin + tipFontSize / 2);
+                        ctx.fillText(tipText, canvasWidth / 2, y);
+                    }
+                    showDialog();
                 }
                 document.body.removeChild(qrResult.tmpDiv);
             }, 50);
