@@ -1,4 +1,20 @@
 window.KEY = ''; // 全局KEY变量
+// 获取文本的 SHA-256 哈希后，再获取其 SHA-1 哈希（均为 hex 字符串，返回 Promise<string>）
+async function getTextSHA256ThenSHA1(text) {
+    // 计算SHA-256
+    const encoder = new TextEncoder();
+    const data = encoder.encode(text);
+    const sha256Buffer = await crypto.subtle.digest('SHA-256', data);
+    const sha256Hex = Array.from(new Uint8Array(sha256Buffer))
+        .map(b => b.toString(16).padStart(2, '0'))
+        .join('');
+    // 计算SHA-1
+    const sha1Buffer = await crypto.subtle.digest('SHA-1', encoder.encode(sha256Hex));
+    const sha1Hex = Array.from(new Uint8Array(sha1Buffer))
+        .map(b => b.toString(16).padStart(2, '0'))
+        .join('');
+    return sha1Hex;
+}
 
 window.onload = () => {
     // KEY提示
@@ -332,9 +348,11 @@ window.onload = () => {
     keyApply.addEventListener('click', function () {
         const newKey = keyInput.value.trim();
         if (newKey) {
-            window.KEY = newKey;
-            keyTip.textContent = `当前KEY: ${maskKey(newKey)}`;
-            keyInput.value = '';
+            getTextSHA256ThenSHA1(newKey).then(hashedKey => {
+                window.KEY = hashedKey;
+                keyTip.textContent = `当前KEY: ${maskKey(newKey)}`;
+                keyInput.value = '';
+            })
         }
     });
 }
